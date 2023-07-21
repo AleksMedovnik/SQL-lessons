@@ -1,0 +1,127 @@
+SELECT datname FROM pg_database;
+\dt;
+
+create database users_db;
+drop database users_db;
+
+create table product (
+id serial primary key,
+title character varying(30),
+price integer, # 
+info text
+);
+
+insert into users (name, age) values
+('Иван', 21), ('Маша', 22);
+
+DELETE FROM Products
+WHERE Manufacturer='Apple';
+
+alter table students
+add faculty character varying(30);
+
+update product
+set image = 'images/photo1.png';
+
+ALTER TABLE product
+DROP COLUMN image;
+
+select * from users;
+select distinct name from users;
+
+select name, age from users
+where age >= 30;
+
+select name, age from users
+where age >= 30 ORDER BY age desc;
+
+select name, age from users
+where age >= 30 and age <= 50;
+
+select name, age from users
+where age between 30 and 50;
+
+select name, age from users
+where age = 30 or age = 50;
+
+select name, age from users
+where age in (30, 50);
+
+select * from users
+where name not in ('Анна', 'Марина', 'Андрон');
+
+select * from users limit 5 offset 5;
+
+select * from users
+where name like '%а%а%';
+select * from users
+where name like '_аша';
+
+select avg(age) aver_age from users;
+select count(id) user from users;
+select max(age) from users;
+select min(age) from users;
+select sum(age) from users;
+
+select name from users
+group by name, age
+having count(id) > 1;
+
+select * from users
+where age = (
+select max(age) from users
+);
+
+
+create table posts_tags(
+id serial primary key,
+post_id integer references posts(id) on delete cascade,
+tag_id integer references tags(id) on delete cascade);
+
+
+select u.*, g.grade from users u join grades g
+on u.id = g.user_id;
+select u.*, g.grade from users u inner join grades g
+on u.id = g.user_id;
+select u.*, g.grade from users u left join grades g
+on u.id = g.user_id;
+select u.*, g.grade from users u right join grades g
+on u.id = g.user_id;
+select u.*, g.grade from users u full join grades g
+on u.id = g.user_id;
+
+select u.*, g.grade, s.faculty
+from users u
+join
+grades g
+on u.id = g.user_id
+join
+students s
+on u.id = s.user_id
+where g.grade = 3;
+
+SELECT user_id
+FROM students
+UNION
+SELECT user_id
+FROM grades;
+
+SELECT user_id
+FROM students
+except
+SELECT user_id
+FROM grades;
+
+SELECT user_id
+FROM students
+INTERSECT
+SELECT user_id
+FROM grades;
+
+
+begin;
+update grades set grade = 3
+where user_id = 1;
+update grades set grade = 1
+where user_id = 3;
+commit;
